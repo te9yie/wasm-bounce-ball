@@ -34,6 +34,7 @@ pub fn main() {
     let mut app = App::new(canvas);
 
     {
+        const DELTA_LIMIT: f64 = 1000.0 / 30.0;
         let window = window().unwrap();
         let performance = window.performance().unwrap();
         let mut last_update_time = performance.now();
@@ -43,6 +44,11 @@ pub fn main() {
         *ff.borrow_mut() = Some(Closure::wrap(Box::new(move || {
             let now = performance.now();
             let delta = now - last_update_time;
+            let delta = if delta < DELTA_LIMIT {
+                delta
+            } else {
+                DELTA_LIMIT
+            };
             last_update_time = now;
 
             app.update(delta);
