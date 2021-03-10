@@ -6,16 +6,11 @@ use web_sys::{window, HtmlCanvasElement};
 
 mod app;
 
-fn create_canvas(width: u32, height: u32) -> HtmlCanvasElement {
+fn get_canvas(id: &str) -> HtmlCanvasElement {
     let window = window().unwrap();
     let document = window.document().unwrap();
-    let body = document.body().unwrap();
-    let canvas = document.create_element("canvas").unwrap();
-    let canvas = canvas.dyn_into::<HtmlCanvasElement>().unwrap();
-    canvas.set_width(width);
-    canvas.set_height(height);
-    body.append_child(&canvas).unwrap();
-    canvas
+    let canvas = document.get_element_by_id(id).unwrap();
+    canvas.dyn_into::<HtmlCanvasElement>().unwrap()
 }
 
 fn request_animation_frame(f: &Closure<dyn FnMut(f64)>) {
@@ -25,11 +20,9 @@ fn request_animation_frame(f: &Closure<dyn FnMut(f64)>) {
         .unwrap();
 }
 
-#[wasm_bindgen(start)]
-pub fn main() {
-    const WIDTH: u32 = 400;
-    const HEIGHT: u32 = 200;
-    let canvas = create_canvas(WIDTH, HEIGHT);
+#[wasm_bindgen]
+pub fn main(id: &str) {
+    let canvas = get_canvas(id);
 
     let mut app = App::new(canvas);
 

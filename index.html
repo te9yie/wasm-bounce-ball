@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <h1>wasm-bounce-ball</h1>
+        <canvas id="my-canvas" width="400" height="200" />
+        <script type="module">
+            (async () => {
+                const { default: init, main } = await import("./pkg/wasm_bounce_ball.js");
+                await init();
+                main("my-canvas");
+            })();
+        </script>
+    </body>
+</html>
